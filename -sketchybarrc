@@ -1,0 +1,89 @@
+#!/usr/bin/env sh
+
+#!/bin/bash
+
+
+sketchybar --bar height=30 \
+                 position=right \
+                 padding_left=10 \
+                 padding_right=10 \
+                 padding_top=50 \
+                 padding_bottom=50 \
+                 color=0x15ffffff
+
+
+           --default icon.padding_left= 30 \
+                     icon.padding_right= 30 \
+
+
+# source "$ITEM_DIR/spaces.sh"
+
+sketchybar --update
+
+sketchybar --add event aerospace_workspace_change
+
+for sid in $(aerospace list-workspaces --all); do
+    sketchybar --add item space.$sid left \
+        --subscribe space.$sid aerospace_workspace_change \
+        --set space.$sid \
+        background.color=0x44ffffff \
+        background.corner_radius=5 \
+        background.height=20 \
+        background.drawing=off \
+        label.padding_top=10 \
+        label.padding_bottom=10 \
+        label="$sid" \
+        click_script="aerospace workspace $sid" \
+        script="$CONFIG_DIR/plugins/aerospace.sh $sid"
+done
+
+
+# source "$HOME/.config/sketchybar/colors.sh" # Loads all defined colors
+# source "$HOME/.config/sketchybar/icons.sh" # Loads all defined icons
+#
+# ITEM_DIR="$HOME/.config/sketchybar/items" # Directory where the items are configured
+PLUGIN_DIR="$HOME/.config/sketchybar/plugins" # Directory where all the plugin scripts are stored
+#
+# FONT="SF Pro" # Needs to have Regular, Bold, Semibold, Heavy and Black variants
+#
+# PADDINGS=10 # All paddings use this value (icon, label, background)
+#
+# POPUP_BORDER_WIDTH=2
+# POPUP_CORNER_RADIUS=11
+#
+# SHADOW=on
+#
+# # Setting up the general bar appearance and default values
+# sketchybar --bar     height=30                                         \
+#                      shadow=$SHADOW                                    \
+#                      position=right                                     \
+#                      sticky=on                                         \
+#                      corner_radius=5                                   \
+#                      blur_radius=20                                    \
+#                                                                        \
+#            --default updates=when_shown                                \
+#                      icon.font="$FONT:Bold:14.0"                       \
+#                      icon.color=$ICON_COLOR                            \
+#                      icon.padding_left=$PADDINGS                       \
+#                      icon.padding_right=$PADDINGS                      \
+#                      label.font="$FONT:Semibold:13.0"                  \
+#                      label.color=$LABEL_COLOR                          \
+#                      label.padding_left=$PADDINGS                      \
+#                      label.padding_right=$PADDINGS                     \
+#                      background.padding_right=$PADDINGS                \
+#                      background.padding_left=$PADDINGS                 \
+#                      popup.background.border_width=2                   \
+#                      popup.background.corner_radius=11                 \
+#                      popup.background.border_color=$POPUP_BORDER_COLOR \
+#                      popup.background.color=$POPUP_BACKGROUND_COLOR    \
+#                      popup.background.shadow.drawing=$SHADOW
+#
+# # Center
+# # source "$ITEM_DIR/spotify.sh"
+# source "$ITEM_DIR/spaces.sh"
+#
+# ############## FINALIZING THE SETUP ##############
+# sketchybar --update
+#
+# echo "sketchybar configuation loaded.."
+#

@@ -1,0 +1,51 @@
+#!/usr/bin/env sh
+
+source "$HOME/.config/sketchybar/colors.sh" # Loads all defined colors
+
+PADDINGS=5 # All paddings use this value (icon, label, background)
+
+
+# Setting up the general bar appearance and default values
+sketchybar --bar     position=right                                     \
+                     sticky=on                                         \
+                                                                       \
+           --default updates=when_shown                                \
+                     icon.font="$FONT:Bold:148.0"                       \
+                     icon.color=$ICON_COLOR                            \
+                     background.padding_right=10 \
+                     background.padding_left=10 \
+                     popup.background.border_width=2                   \
+                     popup.background.corner_radius=11                 \
+                     popup.background.border_color=$POPUP_BORDER_COLOR \
+                     popup.background.color=$POPUP_BACKGROUND_COLOR    \
+                     popup.background.shadow.drawing=$SHADOW
+
+
+#!/usr/bin/env sh
+
+sketchybar --bar height=30 \
+                 position=right \
+                 color=0x15ffffff
+
+sketchybar --update
+
+sketchybar --add event aerospace_workspace_change
+
+# Calculate vertical spacing
+spacing=40  # Adjust this value to change space between numbers
+
+for sid in $(aerospace list-workspaces --all); do
+    y_offset=$((spacing * (sid - 1)))  # Calculate position for each space
+    sketchybar --add item space.$sid left \
+        --subscribe space.$sid aerospace_workspace_change \
+        --set space.$sid \
+        background.color=0x44ffffff \
+        background.corner_radius=5 \
+        background.height=30 \
+        background.drawing=off \
+        label="$sid" \
+        y_offset=$y_offset \
+        click_script="aerospace workspace $sid" \
+        script="$CONFIG_DIR/plugins/aerospace.sh $sid"
+done
+
